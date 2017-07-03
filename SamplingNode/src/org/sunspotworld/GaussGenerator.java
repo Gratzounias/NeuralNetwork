@@ -59,27 +59,21 @@ public class GaussGenerator extends MIDlet implements ISwitchListener {
     private RadiogramConnection tx = null;
     private Radiogram xdg;
     private boolean colorisred = false;
+    private NeuralNetworkManager nm = null;
     
     private NumberGenerator randomGen = new NumberGenerator();
 
-    private void showCount(int count, int color) {
-        for (int i = 7, bit = 1; i >= 0; i--, bit <<= 1) {
-            if ((count & bit) != 0) {
-                leds.getLED(i).setColor(colors[color]);
-                leds.getLED(i).setOn();
-            } else {
-                leds.getLED(i).setOff();
-            }
-        }
+    public GaussGenerator() {
+        nm = new NeuralNetworkManager();
     }
-
+    
     private void showColor(int color) {
         leds.setColor(colors[color]);
         leds.setOn();
     }
 
     protected void startApp() throws MIDletStateChangeException {
-        System.out.println("Broadcast Counter MIDlet");
+        System.out.println("Gauss Generator Midlet Counter MIDlet");
         showColor(color);
         sw1.addISwitchListener(this);
         sw2.addISwitchListener(this);
@@ -91,7 +85,10 @@ public class GaussGenerator extends MIDlet implements ISwitchListener {
                 Thread.sleep(Settings.period*1000);
                 double t = randomGen.generateGaussianValue(30,5);
                 double h = randomGen.generateGaussianValue(50,30);
-                System.out.println("Tick: T = " + t + "\t\t" + " H = " + h);                
+                int result = nm.compute(t, h);
+                
+//                System.out.println("Tick: T = " + t + "\t\t" + " H = " + h);                
+                System.out.println("Tick: T = " + t + "\t\t" + " H = " + h + "  neural network result: " + result);                
                                 
                 if (colorisred) {
                     leds.getLED(0).setColor(LEDColor.RED);                                    

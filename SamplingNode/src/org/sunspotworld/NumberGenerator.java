@@ -73,4 +73,9 @@ public class NumberGenerator {
                 
         return result;
     }
+    
+    public double generateUniformValue() {
+        double x = random.nextInt(100);
+        return x;
+    }
 }
